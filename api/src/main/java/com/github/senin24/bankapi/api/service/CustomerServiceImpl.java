@@ -3,15 +3,12 @@ package com.github.senin24.bankapi.api.service;
 import com.github.senin24.bankapi.api.domain.Account;
 import com.github.senin24.bankapi.api.domain.Customer;
 import com.github.senin24.bankapi.api.repositories.CustomerRepository;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -29,6 +26,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer findByName(String name) {
+        customerRepository.findByName(name);
         throw new UnsupportedOperationException("Not implemented, yet");
 //        return null;
     }
@@ -48,9 +46,9 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     @Override
-    public Collection<Customer> findAllCustomers() {
+    public List<Customer> findAllCustomers() {
 //        return  Lists.newArrayList(customerRepository.findAll());
-        Collection<Customer> customers = new ArrayList<>();
+        List<Customer> customers = new ArrayList<>();
         customerRepository.findAll().forEach(customers::add);
         return customers;
     }

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1/bankapi")
 public class BankAPIController {
@@ -26,16 +28,16 @@ public class BankAPIController {
     }
 
     @GetMapping(path = "/customer")
-    ResponseEntity<Iterable<Customer>> getAllCustomers() {
+    ResponseEntity<List<Customer>> getAllCustomers() {
 //    ResponseEntity<Collection<Customer>> getAllCustomers() {
         return ResponseEntity.ok(this.customerService.findAllCustomers());
     }
 
     //TODO
     @GetMapping(path = "/customer", value = "/{name}")
-    ResponseEntity<Iterable<Customer>> getCustomerByName() {
+    ResponseEntity<Customer> getCustomerByName(String name) {
 //    ResponseEntity<Collection<Customer>> getAllCustomers() {
-        return ResponseEntity.ok(this.customerService.findAllCustomers());
+        return ResponseEntity.ok(this.customerService.findByName(name));
     }
 
 

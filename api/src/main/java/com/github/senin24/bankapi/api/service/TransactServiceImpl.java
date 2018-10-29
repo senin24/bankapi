@@ -3,7 +3,7 @@ package com.github.senin24.bankapi.api.service;
 import com.github.senin24.bankapi.api.domain.Account;
 import com.github.senin24.bankapi.api.domain.Currency;
 import com.github.senin24.bankapi.api.domain.Transact;
-import com.github.senin24.bankapi.api.repositories.TransationRepository;
+import com.github.senin24.bankapi.api.repositories.TransactionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +17,11 @@ public class TransactServiceImpl implements TransactService {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    TransationRepository transationRepository;
+    TransactionRepository transactionRepository;
 
     @Autowired
-    public TransactServiceImpl(TransationRepository transationRepository) {
-        this.transationRepository = transationRepository;
+    public TransactServiceImpl(TransactionRepository transactionRepository) {
+        this.transactionRepository = transactionRepository;
     }
 
 

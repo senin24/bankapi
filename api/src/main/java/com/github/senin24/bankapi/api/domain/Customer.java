@@ -19,13 +19,13 @@ public class Customer {
     private Long id;
 
     private String name;
-    private int inn;
+    private long inn;
     private String description;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Account> accounts = new HashSet<>();
 
-    public Customer(String name, int inn, String description) {
+    public Customer(String name, long inn, String description) {
         this.name = name;
         this.inn = inn;
         this.description = description;

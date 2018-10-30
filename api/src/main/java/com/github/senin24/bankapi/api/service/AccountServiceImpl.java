@@ -7,9 +7,13 @@ import com.github.senin24.bankapi.api.repositories.AccountRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -24,7 +28,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
-
+    @Override
+    public List<Account> findByCustomerId(Long customer_id) {
+        List<Account> accounts = new ArrayList<>();
+        accountRepository.findByCustomerId(customer_id).forEach(accounts::add);
+        return accounts;
+    }
 
     @Override
     public Account findByName(String accountName) {

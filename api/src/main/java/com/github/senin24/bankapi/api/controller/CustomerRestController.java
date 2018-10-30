@@ -1,5 +1,6 @@
 package com.github.senin24.bankapi.api.controller;
 
+import com.github.senin24.bankapi.api.domain.Account;
 import com.github.senin24.bankapi.api.domain.Customer;
 import com.github.senin24.bankapi.api.service.AccountService;
 import com.github.senin24.bankapi.api.service.CustomerService;
@@ -30,15 +31,21 @@ public class CustomerRestController {
     }
 
     @GetMapping
-    ResponseEntity<Collection<Customer>> getCollection() {
-//    ResponseEntity<Collection<Customer>> getAllCustomers() {
+    ResponseEntity<Collection<Customer>> getCustomers() {
         return ResponseEntity.ok(this.customerService.findAllCustomers());
     }
 
-    @GetMapping(value = "/{id}")
-    ResponseEntity<Customer> get(@PathVariable Long id) throws Exception {
-        return this.customerService.findById(id);
+    @GetMapping(value = "/{customer_id}/accounts")
+    ResponseEntity<Collection<Account>> getAccountsByCustomerId(@PathVariable Long customer_id) {
+        return ResponseEntity.ok(this.accountService.findByCustomerId(customer_id));
     }
+
+    @GetMapping(value = "/{customer_id}")
+    ResponseEntity<Customer> getCustomer(@PathVariable Long customer_id) throws Exception {
+        return this.customerService.findById(customer_id);
+    }
+
+
 
 
 }

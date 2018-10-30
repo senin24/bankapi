@@ -18,20 +18,17 @@ public class Account {
     @NonNull
     private Long id;
 
-    @NonNull
     private String accountNumber;
-    @NonNull
     private BigDecimal balance;
 
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @NonNull
     private Set<Transact> transacts = new HashSet<>();
 
     public Account(String accountNumber, BigDecimal balance, Currency currency, Customer customer) {

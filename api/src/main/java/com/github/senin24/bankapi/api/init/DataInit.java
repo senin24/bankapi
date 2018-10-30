@@ -38,11 +38,11 @@ public class DataInit implements ApplicationRunner {
         Customer customer04 = new Customer("Клиент04", 6201234567894L, "тестовый клиент");
         Customer customer05 = new Customer("Клиент05", 6201234567895L, "тестовый клиент");
 
-        customerRepository.save(customer01);
-        customerRepository.save(customer02);
-        customerRepository.save(customer03);
-        customerRepository.save(customer04);
-        customerRepository.save(customer05);
+        customer01 = customerRepository.save(customer01);
+        customer02 = customerRepository.save(customer02);
+        customer03 = customerRepository.save(customer03);
+        customer04 = customerRepository.save(customer04);
+        customer05 = customerRepository.save(customer05);
 
 //        Account account01Customer01 = new Account("00001_RUB_customer01", new BigDecimal(1000), Currency.RUB, customer01);
 //        Account account02Customer01 = new Account("00002_EUR_customer01", new BigDecimal(1000), Currency.EUR, customer01);

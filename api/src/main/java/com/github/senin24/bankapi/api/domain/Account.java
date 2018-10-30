@@ -1,8 +1,6 @@
 package com.github.senin24.bankapi.api.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -17,9 +15,12 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @NonNull
     private Long id;
 
+    @NonNull
     private String accountNumber;
+    @NonNull
     private BigDecimal balance;
 
     @Enumerated(EnumType.STRING)
@@ -29,7 +30,8 @@ public class Account {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @NonNull
     private Set<Transact> transacts = new HashSet<>();
 
     public Account(String accountNumber, BigDecimal balance, Currency currency, Customer customer) {

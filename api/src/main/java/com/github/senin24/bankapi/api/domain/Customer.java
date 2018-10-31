@@ -16,17 +16,18 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
+    private String name, description;
     private long inn;
-    private String description;
-
-//    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
-//    private Set<Account> accounts = new HashSet<>();
 
     public Customer(String name, long inn, String description) {
         this.name = name;
         this.inn = inn;
         this.description = description;
+    }
+
+    public Customer(String name, long inn) {
+        this.name = name;
+        this.inn = inn;
+        this.description = "";
     }
 }

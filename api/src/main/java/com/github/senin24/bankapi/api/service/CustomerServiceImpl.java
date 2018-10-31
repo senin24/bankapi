@@ -25,16 +25,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> findAllCustomers() {
-//        return  Lists.newArrayList(customerRepository.findAll());
-        List<Customer> customers = new ArrayList<>();
-        customerRepository.findAll().forEach(customers::add);
-        return customers;
+    public ResponseEntity<Customer> findById(Long customer_id) throws Exception {
+        //TODO create custom CustomerNotFoundException(Long id)
+        return customerRepository.findById(customer_id).map(ResponseEntity::ok).orElseThrow(() -> new Exception());
     }
 
     @Override
-    public ResponseEntity<Customer> findById(Long id) throws Exception {
-        return customerRepository.findById(id).map(ResponseEntity::ok).orElseThrow(() -> new Exception());
+    public List<Customer> findAllCustomers() {
+        List<Customer> customers = new ArrayList<>();
+        customerRepository.findAll().forEach(customers::add);
+        return customers;
     }
 
     @Override

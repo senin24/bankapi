@@ -27,17 +27,17 @@ public class AccountServiceImpl implements AccountService {
         this.accountRepository = accountRepository;
     }
 
+    @Override
+    public ResponseEntity<Account> findById(Long account_id) throws Exception {
+        //TODO create custom AccountNotFoundException(Long id)
+        return accountRepository.findById(account_id).map(ResponseEntity::ok).orElseThrow(() -> new Exception());
+    }
 
     @Override
     public List<Account> findByCustomerId(Long customer_id) {
         List<Account> accounts = new ArrayList<>();
         accountRepository.findByCustomerId(customer_id).forEach(accounts::add);
         return accounts;
-    }
-
-    @Override
-    public Account findByName(String accountName) {
-        throw new UnsupportedOperationException("Not implemented, yet");
     }
 
     @Override

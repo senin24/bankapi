@@ -17,7 +17,7 @@ public class Transact {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String transactionName;
+    private String transactionName, description;
     private BigDecimal amount;
     private Date startDate;
     private Date finishDate;
@@ -28,11 +28,11 @@ public class Transact {
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="debit_account_id", nullable = false)
     private Account debitAccount;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="credit_account_id", nullable = false)
     private Account creditAccount;
 

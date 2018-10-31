@@ -6,19 +6,20 @@ import com.github.senin24.bankapi.api.domain.Customer;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
 
 public interface AccountService {
 
-    List<Account> findByCustomerId(Long id);
+    ResponseEntity<Account> findById(Long account_id) throws Exception;
 
-    Account findByName(String accountName);
+    List<Account> findByCustomerId(Long customer_id);
+
+
+
 
     Account create(String accountName, Customer customer);
 
     Account create(String accountName, BigDecimal balance, Currency currency, Customer customer);
 
     void updateBalance (Account account, BigDecimal newBalance);
-
 }

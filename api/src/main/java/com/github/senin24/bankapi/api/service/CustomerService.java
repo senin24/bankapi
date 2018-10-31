@@ -8,9 +8,11 @@ import java.util.List;
 
 public interface CustomerService {
 
+    ResponseEntity<Customer> findById(Long id) throws Exception;
+
     List<Customer> findAllCustomers();
 
-    ResponseEntity<Customer> findById(Long id) throws Exception;
+
 
     Customer create(String name, int inn, String description);
 

@@ -9,7 +9,9 @@ import com.github.senin24.bankapi.api.service.TransactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Collection;
 
 @RestController
@@ -39,7 +41,12 @@ public class BankApiRestController {
 
     @GetMapping(value = "/customers/{customer_id}/accounts")
     ResponseEntity<Collection<Account>> getAccountsByCustomerId(@PathVariable Long customer_id) {
-        return ResponseEntity.ok(this.accountService.findByCustomerId(customer_id));
+        return accountService.findByCustomerId(customer_id);
+    }
+
+    @GetMapping(value = "/customers/{customer_id}/accounts/{account_id}")
+    ResponseEntity<Account> getAccountByCustomerAndId(@PathVariable Long customer_id, @PathVariable Long account_id) throws Exception {
+        return this.accountService.findByCustomerIdAndId(customer_id, account_id);
     }
 
     @GetMapping(value = "/accounts/{account_id}")
@@ -58,12 +65,36 @@ public class BankApiRestController {
     }
 
 
-    @PostMapping(value = "/customers")
-    ResponseEntity<Customer> createCustomer(@RequestBody Customer c) throws Exception {
-        Customer customer = customerService.create(new Customer(c.getName()));
 
-        return this.customerService.findById(customer_id);
+    @PostMapping(value = "/customers")
+    ResponseEntity<Customer> createCustomer(@RequestBody Customer c) {
+        Customer customer = customerService.create(new Customer(c.getName(), c.getInn()));
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(customer.getId()).toUri();
+        return ResponseEntity.created(location).build();
     }
+
+
+    @PostMapping(value = "/customers/{customer_id}/accounts")
+    ResponseEntity<Account> createAccount(@RequestBody Account a, @PathVariable Long customer_id) {
+        Account account = accountService.create(
+                new Account(a.getAccountNumber(), a.getBalance(), a.getCurrency()), customer_id);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(account.getId()).toUri();
+        return ResponseEntity.created(location).build();
+    }
+
+    @PostMapping(value = "/customers/{customer_id}/accounts/{debit_account_id}/transactions")
+    ResponseEntity<Transact> createAndRunTransact(
+            @PathVariable Long customer_id, @PathVariable Long debit_account_id, @RequestBody Transact t, @RequestBody Long creditAccountId) {
+        Transact transact = transactService.create(new Transact(
+                t.getTransactionName(), t.getAmount(), t.getCurrency()), customer_id, debit_account_id, creditAccountId);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(transact.getId()).toUri();
+        return ResponseEntity.created(location).build();
+    }
+
 
 
 

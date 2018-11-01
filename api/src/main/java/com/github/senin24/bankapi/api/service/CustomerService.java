@@ -14,7 +14,7 @@ public interface CustomerService {
 
 
 
-    Customer create(String name, int inn, String description);
-
     void addAccount(Customer customer, Account account);
+
+    Customer create(Customer customer);
 }

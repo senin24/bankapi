@@ -4,11 +4,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class BankApiErrorHandlerController {
 
     private final MediaType errorMediaType = MediaType.parseMediaType("application/vnd.error");
-    VndErrors vndErrors;
+//    VndErrors vndErrors;
 
 //    ResponseEntity<VndErrors> notFoundException (Cu)
 

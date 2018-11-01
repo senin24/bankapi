@@ -16,9 +16,10 @@ public interface TransactService {
     List<Transact> findByAccountId(Long account_id);
 
 
+    Transact create(Transact transact, Long customer_id, Long debit_account_id, Long creditAccountId);
+
 
 
     Transact create(String transactionName, BigDecimal amount, Date time, Currency currency
             , Account debitAccount, Account creditAccount);
-
 }

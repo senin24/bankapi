@@ -3,8 +3,6 @@ package com.github.senin24.bankapi.api.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Data
@@ -19,15 +17,15 @@ public class Customer {
     private String name, description;
     private long inn;
 
-    public Customer(String name, long inn, String description) {
-        this.name = name;
-        this.inn = inn;
-        this.description = description;
-    }
-
     public Customer(String name, long inn) {
         this.name = name;
         this.inn = inn;
         this.description = "";
+    }
+
+    public Customer(String name, long inn, String description) {
+        this.name = name;
+        this.inn = inn;
+        this.description = description;
     }
 }

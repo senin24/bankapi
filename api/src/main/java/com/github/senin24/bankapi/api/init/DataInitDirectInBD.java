@@ -15,21 +15,21 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 
 @Component
-public class DataInit implements ApplicationRunner {
+public class DataInitDirectInBD implements ApplicationRunner {
 
     private CustomerRepository customerRepository;
     private AccountRepository accountRepository;
     private TransactionRepository transactService;
 
     @Autowired
-    public DataInit(CustomerRepository customerRepository, AccountRepository accountRepository, TransactionRepository transactService) {
+    public DataInitDirectInBD(CustomerRepository customerRepository, AccountRepository accountRepository, TransactionRepository transactService) {
         this.customerRepository = customerRepository;
         this.accountRepository = accountRepository;
         this.transactService = transactService;
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         Customer customer01 = customerRepository.save(new Customer("Клиент01", 6201234567891L, "тестовый клиент"));
         Customer customer02 = customerRepository.save(new Customer("Клиент02", 6201234567892L, "тестовый клиент"));
         Customer customer03 = customerRepository.save(new Customer("Клиент03", 6201234567893L, "тестовый клиент"));

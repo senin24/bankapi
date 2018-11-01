@@ -36,6 +36,7 @@ public class Transact {
     @JoinColumn(name="credit_account_id", nullable = false)
     private Account creditAccount;
 
+    //for test-seeding
     public Transact(String transactionName, BigDecimal amount, Currency currency, Account debitAccount, Account creditAccount) {
         this.transactionName = transactionName;
         this.amount = amount;
@@ -44,5 +45,14 @@ public class Transact {
         this.currency = currency;
         this.debitAccount = debitAccount;
         this.creditAccount = creditAccount;
+    }
+
+    //for PostMapping
+    public Transact(String transactionName, BigDecimal amount, Currency currency) {
+        this.transactionName = transactionName;
+        this.amount = amount;
+        this.startDate = new Date();
+        this.status = Status.getDefault();
+        this.currency = currency;
     }
 }

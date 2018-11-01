@@ -15,7 +15,6 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @NonNull
     private Long id;
 
     private String accountNumber;
@@ -31,6 +30,7 @@ public class Account {
 //    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //    private Set<Transact> transacts = new HashSet<>();
 
+    //for test-seeding
     public Account(String accountNumber, BigDecimal balance, Currency currency, Customer customer) {
         this.accountNumber = accountNumber;
         this.balance = balance;
@@ -38,10 +38,10 @@ public class Account {
         this.customer = customer;
     }
 
-    public Account(String accountNumber, Customer customer) {
+    //for PostMapping
+    public Account(String accountNumber, BigDecimal balance, Currency currency) {
         this.accountNumber = accountNumber;
-        this.customer = customer;
-        this.balance = new BigDecimal(0);
-        this.currency = Currency.getDefault();
+        this.balance = balance;
+        this.currency = currency;
     }
 }

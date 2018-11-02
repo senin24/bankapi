@@ -1,20 +1,17 @@
 package com.github.senin24.bankapi.api.service;
 
-import com.github.senin24.bankapi.api.domain.Account;
 import com.github.senin24.bankapi.api.domain.Customer;
-import org.springframework.http.ResponseEntity;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Optional;
 
 public interface CustomerService {
 
-    ResponseEntity<Customer> findById(Long id) throws Exception;
+    Optional<Customer> findById(Long id) throws Exception;
 
-    List<Customer> findAllCustomers();
-
-
-
-    void addAccount(Customer customer, Account account);
+    Collection<Customer> findAllCustomers();
 
     Customer create(Customer customer);
+
+    Customer update(Customer customer, Long customer_id);
 }

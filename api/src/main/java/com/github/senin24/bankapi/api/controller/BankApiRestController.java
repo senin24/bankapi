@@ -3,6 +3,9 @@ package com.github.senin24.bankapi.api.controller;
 import com.github.senin24.bankapi.api.domain.Account;
 import com.github.senin24.bankapi.api.domain.Customer;
 import com.github.senin24.bankapi.api.domain.Transact;
+import com.github.senin24.bankapi.api.exception.AccountNotFoundException;
+import com.github.senin24.bankapi.api.exception.CustomerNotFoundException;
+import com.github.senin24.bankapi.api.exception.TransactNotFoundException;
 import com.github.senin24.bankapi.api.service.AccountService;
 import com.github.senin24.bankapi.api.service.CustomerService;
 import com.github.senin24.bankapi.api.service.TransactService;
@@ -36,32 +39,27 @@ public class BankApiRestController {
 
     @GetMapping(value = "/customers/{customer_id}")
     ResponseEntity<Customer> getCustomer(@PathVariable Long customer_id) throws Exception {
-        return this.customerService.findById(customer_id);
+        return customerService.findById(customer_id).map(ResponseEntity::ok).orElseThrow(() -> new CustomerNotFoundException(customer_id));
     }
 
     @GetMapping(value = "/customers/{customer_id}/accounts")
     ResponseEntity<Collection<Account>> getAccountsByCustomerId(@PathVariable Long customer_id) {
-        return accountService.findByCustomerId(customer_id);
-    }
-
-    @GetMapping(value = "/customers/{customer_id}/accounts/{account_id}")
-    ResponseEntity<Account> getAccountByCustomerAndId(@PathVariable Long customer_id, @PathVariable Long account_id) throws Exception {
-        return this.accountService.findByCustomerIdAndId(customer_id, account_id);
+        return ResponseEntity.ok(accountService.findByCustomerId(customer_id));
     }
 
     @GetMapping(value = "/accounts/{account_id}")
     ResponseEntity<Account> getAccountById(@PathVariable Long account_id) throws Exception {
-        return this.accountService.findById(account_id);
+        return accountService.findById(account_id).map(ResponseEntity::ok).orElseThrow(() -> new AccountNotFoundException(account_id));
     }
 
     @GetMapping(value = "/accounts/{account_id}/transactions")
     ResponseEntity<Collection<Transact>> getTransactionsByAccountId(@PathVariable Long account_id) {
-        return ResponseEntity.ok(this.transactService.findByAccountId(account_id));
+        return ResponseEntity.ok(transactService.findByAccountId(account_id));
     }
 
     @GetMapping(value = "/transactions/{transact_id}")
     ResponseEntity<Transact> getTransactById(@PathVariable Long transact_id) throws Exception {
-        return this.transactService.findById(transact_id);
+        return transactService.findById(transact_id).map(ResponseEntity::ok).orElseThrow(() -> new TransactNotFoundException(transact_id));
     }
 
 
@@ -75,25 +73,34 @@ public class BankApiRestController {
     }
 
 
-    @PostMapping(value = "/customers/{customer_id}/accounts")
-    ResponseEntity<Account> createAccount(@RequestBody Account a, @PathVariable Long customer_id) {
+    @PostMapping(value = "/accounts")
+    ResponseEntity<Account> createAccount(@RequestBody IncRequestBody rb) {
         Account account = accountService.create(
-                new Account(a.getAccountNumber(), a.getBalance(), a.getCurrency()), customer_id);
+                new Account(rb.getAccountNumber(), rb.getBalance(), rb.getCurrency()), rb.getCustomerId());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(account.getId()).toUri();
         return ResponseEntity.created(location).build();
     }
 
-    @PostMapping(value = "/customers/{customer_id}/accounts/{debit_account_id}/transactions")
-    ResponseEntity<Transact> createAndRunTransact(
-            @PathVariable Long customer_id, @PathVariable Long debit_account_id, @RequestBody Transact t, @RequestBody Long creditAccountId) {
+    @PostMapping(value = "/transactions")
+    ResponseEntity<Transact> createAndRunTransact(@RequestBody IncRequestBody rb) {
         Transact transact = transactService.create(new Transact(
-                t.getTransactionName(), t.getAmount(), t.getCurrency()), customer_id, debit_account_id, creditAccountId);
-
+                rb.getTransactionName(), rb.getAmount(), rb.getCurrency()), rb.getDebitAccountId(), rb.getCreditAccountId());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(transact.getId()).toUri();
         return ResponseEntity.created(location).build();
     }
+
+
+    @PutMapping(value = "/customers/{customer_id}")
+    ResponseEntity<Customer> updateCustomer(@RequestBody IncRequestBody rb, @PathVariable Long customer_id) {
+        URI selfLink = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
+        Customer customer = new Customer();
+        customer.setDescription(rb.getDescription());
+        return ResponseEntity.created(selfLink).body(customerService.update(customer, customer_id));
+    }
+
+
 
 
 

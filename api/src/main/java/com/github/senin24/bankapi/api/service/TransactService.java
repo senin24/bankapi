@@ -1,25 +1,17 @@
 package com.github.senin24.bankapi.api.service;
 
-import com.github.senin24.bankapi.api.domain.Account;
-import com.github.senin24.bankapi.api.domain.Currency;
 import com.github.senin24.bankapi.api.domain.Transact;
-import org.springframework.http.ResponseEntity;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import java.util.Collection;
+import java.util.Optional;
 
 public interface TransactService {
 
-    ResponseEntity<Transact> findById(Long transact_id) throws Exception;
+    Optional<Transact> findById(Long transact_id) throws Exception;
 
-    List<Transact> findByAccountId(Long account_id);
+    Collection<Transact> findByAccountId(Long account_id);
 
+    Transact create(Transact transact, Long debit_account_id, Long creditAccountId);
 
-    Transact create(Transact transact, Long customer_id, Long debit_account_id, Long creditAccountId);
-
-
-
-    Transact create(String transactionName, BigDecimal amount, Date time, Currency currency
-            , Account debitAccount, Account creditAccount);
+    Transact update(Transact transact);
 }

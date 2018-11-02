@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface AccountRepository extends CrudRepository<Account, Long> {
 
 //    Iterable<Account> findByCustomerId(Long customer_id);
-    Optional<Collection<Account>> findByCustomerId(Long customer_id);
+    Collection<Account> findByCustomerId(Long customer_id);
 
     Optional<Account> findByCustomerIdAndId(Long customer_id, Long account_id);
 }

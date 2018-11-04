@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
-public class IncRequestBody {
+public class RequestBody {
     private Long id, customerId, accountId, debitAccountId, creditAccountId;
     private String name, description, accountNumber, transactionName;
     private long inn;

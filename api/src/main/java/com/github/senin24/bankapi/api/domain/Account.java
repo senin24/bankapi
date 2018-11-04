@@ -17,7 +17,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String accountNumber;
+    private String accountNumber, description;
     private BigDecimal balance;
 
     @Enumerated(EnumType.STRING)

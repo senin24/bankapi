@@ -25,7 +25,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Optional<Customer> findById(Long customer_id) throws Exception {
+    public Optional<Customer> findById(Long customer_id) {
         return customerRepository.findById(customer_id);
     }
 
@@ -36,23 +36,17 @@ public class CustomerServiceImpl implements CustomerService {
         return customers;
     }
 
-
     @Override
     public Customer create(Customer customer) {
         return customerRepository.save(customer);
     }
 
     @Override
-    public Customer update(Customer customer, Long customer_id) {
-        Customer customer2 = customerRepository.findById(customer_id).orElseThrow(() -> new CustomerNotFoundException(customer_id));
-        customer2.setDescription(customer.getDescription());
-        return customerRepository.save(customer2);
-//
-//        return customerRepository.findById(customer_id).map(existing -> {
-//            customerRepository.save(existing)
-//        }).orElseThrow(() -> new CustomerNotFoundException(customer_id)));
-//
-////        return null;
+    public Customer update(String name, String description, Long customer_id) {
+        Customer customer = customerRepository.findById(customer_id).orElseThrow(() -> new CustomerNotFoundException(customer_id));
+        if (!name.isEmpty()) customer.setName(name);
+        if (!description.isEmpty()) customer.setDescription(description);
+        return customerRepository.save(customer);
     }
 
 

@@ -13,5 +13,5 @@ public interface CustomerService {
 
     Customer create(Customer customer);
 
-    Customer update(Customer customer, Long customer_id);
+    Customer update(String name, String description, Long customer_id);
 }

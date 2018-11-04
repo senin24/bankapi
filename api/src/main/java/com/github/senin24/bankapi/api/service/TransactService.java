@@ -13,5 +13,5 @@ public interface TransactService {
 
     Transact create(Transact transact, Long debit_account_id, Long creditAccountId);
 
-    Transact update(Transact transact);
+    Transact update(String description, Long transact_id);
 }

@@ -2,6 +2,7 @@ package com.github.senin24.bankapi.api.service;
 
 import com.github.senin24.bankapi.api.domain.*;
 import com.github.senin24.bankapi.api.exception.AccountNotFoundException;
+import com.github.senin24.bankapi.api.exception.TransactNotFoundException;
 import com.github.senin24.bankapi.api.repositories.AccountRepository;
 import com.github.senin24.bankapi.api.repositories.CustomerRepository;
 import com.github.senin24.bankapi.api.repositories.TransactionRepository;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public abstract class TransactServiceImpl implements TransactService {
+public class TransactServiceImpl implements TransactService {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -47,7 +48,6 @@ public abstract class TransactServiceImpl implements TransactService {
         transacts.addAll(transactionRepository.findByDebitAccountId(account_id).orElseThrow(() -> new AccountNotFoundException(account_id)));
         return transacts;
     }
-
 
     /**
      * Saved transact if find debitAccount and creditAccount.
@@ -106,5 +106,12 @@ public abstract class TransactServiceImpl implements TransactService {
         }
         transact.setFinishDate(new Date());
         transact.setStatus(Status.COMPLETE);
+    }
+
+    @Override
+    public Transact update(String description, Long transact_id) {
+        Transact transact = transactionRepository.findById(transact_id).orElseThrow(() -> new TransactNotFoundException(transact_id));
+        if (!description.isEmpty()) transact.setDescription(description);
+        return transactionRepository.save(transact);
     }
 }

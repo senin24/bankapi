@@ -2,6 +2,7 @@ package com.github.senin24.bankapi.api.service;
 
 import com.github.senin24.bankapi.api.domain.Account;
 import com.github.senin24.bankapi.api.domain.Customer;
+import com.github.senin24.bankapi.api.exception.AccountNotFoundException;
 import com.github.senin24.bankapi.api.exception.CustomerNotFoundException;
 import com.github.senin24.bankapi.api.repositories.AccountRepository;
 import com.github.senin24.bankapi.api.repositories.CustomerRepository;
@@ -34,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Collection<Account> findByCustomerId(Long customer_id) {
-        if (!customerRepository.existsById(customer_id)) throw new CustomerNotFoundException(customer_id);
+        customerRepository.findById(customer_id).orElseThrow(() -> new CustomerNotFoundException(customer_id));
         return accountRepository.findByCustomerId(customer_id);
     }
 
@@ -45,12 +46,10 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.save(account);
     }
 
-
-
-
     @Override
-    public Account update(Account account) {
-        return null;
+    public Account update(String description, Long account_id) {
+        Account account = accountRepository.findById(account_id).orElseThrow(() -> new AccountNotFoundException(account_id));
+        if (!description.isEmpty()) account.setDescription(description);
+        return accountRepository.save(account);
     }
-
 }

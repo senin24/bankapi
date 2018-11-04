@@ -65,7 +65,7 @@ public class BankApiRestController {
 
 
     @PostMapping(value = "/customers")
-    ResponseEntity<Customer> createCustomer(@RequestBody Customer c) {
+    ResponseEntity<Customer> createCustomer(@org.springframework.web.bind.annotation.RequestBody Customer c) {
         Customer customer = customerService.create(new Customer(c.getName(), c.getInn()));
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(customer.getId()).toUri();
@@ -74,7 +74,7 @@ public class BankApiRestController {
 
 
     @PostMapping(value = "/accounts")
-    ResponseEntity<Account> createAccount(@RequestBody IncRequestBody rb) {
+    ResponseEntity<Account> createAccount(@org.springframework.web.bind.annotation.RequestBody RequestBody rb) {
         Account account = accountService.create(
                 new Account(rb.getAccountNumber(), rb.getBalance(), rb.getCurrency()), rb.getCustomerId());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -83,7 +83,7 @@ public class BankApiRestController {
     }
 
     @PostMapping(value = "/transactions")
-    ResponseEntity<Transact> createAndRunTransact(@RequestBody IncRequestBody rb) {
+    ResponseEntity<Transact> createAndRunTransact(@org.springframework.web.bind.annotation.RequestBody RequestBody rb) {
         Transact transact = transactService.create(new Transact(
                 rb.getTransactionName(), rb.getAmount(), rb.getCurrency()), rb.getDebitAccountId(), rb.getCreditAccountId());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -93,12 +93,23 @@ public class BankApiRestController {
 
 
     @PutMapping(value = "/customers/{customer_id}")
-    ResponseEntity<Customer> updateCustomer(@RequestBody IncRequestBody rb, @PathVariable Long customer_id) {
+    ResponseEntity<Customer> updateCustomer(@org.springframework.web.bind.annotation.RequestBody RequestBody rb, @PathVariable Long customer_id) {
         URI selfLink = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
-        Customer customer = new Customer();
-        customer.setDescription(rb.getDescription());
-        return ResponseEntity.created(selfLink).body(customerService.update(customer, customer_id));
+        return ResponseEntity.created(selfLink).body(customerService.update(rb.getName(), rb.getDescription(), customer_id));
     }
+
+    @PutMapping(value = "/accounts/{account_id}")
+    ResponseEntity<Account> updateAccount(@org.springframework.web.bind.annotation.RequestBody RequestBody rb, @PathVariable Long account_id) {
+        URI selfLink = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
+        return ResponseEntity.created(selfLink).body(accountService.update(rb.getDescription(), account_id));
+    }
+
+    @PutMapping(value = "/accounts/{transact_id}")
+    ResponseEntity<Transact> updateTransaction(@org.springframework.web.bind.annotation.RequestBody RequestBody rb, @PathVariable Long transact_id) {
+        URI selfLink = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
+        return ResponseEntity.created(selfLink).body(transactService.update(rb.getDescription(), transact_id));
+    }
+
 
 
 

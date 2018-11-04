@@ -13,5 +13,5 @@ public interface AccountService {
 
     Account create(Account account, Long customer_id);
 
-    Account update(Account account);
+    Account update(String description, Long account_id);
 }

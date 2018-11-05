@@ -45,15 +45,15 @@ public class DataInitDirectInBD implements ApplicationRunner {
         Account account07 = accountRepository.save(new Account("00001_BTC_customer04", new BigDecimal(0), Currency.BTC, customer04));
         Account account08 = accountRepository.save(new Account("00001_EUR_customer05", new BigDecimal(0), Currency.EUR, customer05));
 
-        Transact transact01 = transactService.save(new Transact("Транзакция Клиент01 RUB Клиент02", new BigDecimal(100), Currency.RUB, account01, account05));
-        Transact transact02 = transactService.save(new Transact("Транзакция Клиент01 USD Клиент03", new BigDecimal(100), Currency.USD, account02, account06));
-        Transact transact03 = transactService.save(new Transact("Транзакция Клиент01 BTC Клиент04", new BigDecimal(100), Currency.BTC, account03, account07));
-        Transact transact04 = transactService.save(new Transact("Транзакция Клиент01 EUR Клиент05", new BigDecimal(100), Currency.EUR, account04, account08));
+        transactService.save(new Transact("Транзакция Клиент01 RUB Клиент02", new BigDecimal(100), Currency.RUB, account01, account05));
+        transactService.save(new Transact("Транзакция Клиент01 USD Клиент03", new BigDecimal(100), Currency.USD, account02, account06));
+        transactService.save(new Transact("Транзакция Клиент01 BTC Клиент04", new BigDecimal(100), Currency.BTC, account03, account07));
+        transactService.save(new Transact("Транзакция Клиент01 EUR Клиент05", new BigDecimal(100), Currency.EUR, account04, account08));
 
-        Transact transact05 = transactService.save(new Transact("Транзакция Обратно Клиент02 RUB Клиент01", new BigDecimal(100), Currency.RUB, account05, account01));
-        Transact transact06 = transactService.save(new Transact("Транзакция Обратно Клиент03 USD Клиент01", new BigDecimal(100), Currency.USD, account06, account02));
-        Transact transact07 = transactService.save(new Transact("Транзакция Обратно Клиент04 BTC Клиент01", new BigDecimal(100), Currency.BTC, account07, account03));
-        Transact transact08 = transactService.save(new Transact("Транзакция Обратно Клиент05 EUR Клиент01", new BigDecimal(100), Currency.EUR, account08, account04));
+        transactService.save(new Transact("Транзакция Обратно Клиент02 RUB Клиент01", new BigDecimal(100), Currency.RUB, account05, account01));
+        transactService.save(new Transact("Транзакция Обратно Клиент03 USD Клиент01", new BigDecimal(100), Currency.USD, account06, account02));
+        transactService.save(new Transact("Транзакция Обратно Клиент04 BTC Клиент01", new BigDecimal(100), Currency.BTC, account07, account03));
+        transactService.save(new Transact("Транзакция Обратно Клиент05 EUR Клиент01", new BigDecimal(100), Currency.EUR, account08, account04));
     }
 
 }

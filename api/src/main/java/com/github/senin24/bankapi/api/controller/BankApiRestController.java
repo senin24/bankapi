@@ -32,6 +32,8 @@ public class BankApiRestController {
         this.transactService = transactService;
     }
 
+    /*** GETs endpoints: ***/
+
     @GetMapping(path = "/customers")
     ResponseEntity<Collection<Customer>> getCustomers() {
         return ResponseEntity.ok(this.customerService.findAllCustomers());
@@ -62,7 +64,7 @@ public class BankApiRestController {
         return transactService.findById(transact_id).map(ResponseEntity::ok).orElseThrow(() -> new TransactNotFoundException(transact_id));
     }
 
-
+    /*** POSTs endpoints: ***/
 
     @PostMapping(value = "/customers")
     ResponseEntity<Customer> createCustomer(@RequestBody Customer c) {
@@ -90,6 +92,7 @@ public class BankApiRestController {
         return ResponseEntity.created(location).build();
     }
 
+    /*** PUTs endpoints: ***/
 
     @PutMapping(value = "/customers/{customer_id}")
     ResponseEntity<Customer> updateCustomer(@RequestBody RB rb, @PathVariable Long customer_id) {
@@ -108,12 +111,5 @@ public class BankApiRestController {
         URI selfLink = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
         return ResponseEntity.created(selfLink).body(transactService.update(rb.getDescription(), transact_id));
     }
-
-
-
-
-
-
-
 
 }

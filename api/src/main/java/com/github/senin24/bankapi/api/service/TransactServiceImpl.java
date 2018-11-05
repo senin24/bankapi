@@ -7,8 +7,6 @@ import com.github.senin24.bankapi.api.exception.TransactRefusedException;
 import com.github.senin24.bankapi.api.repositories.AccountRepository;
 import com.github.senin24.bankapi.api.repositories.CustomerRepository;
 import com.github.senin24.bankapi.api.repositories.TransactionRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +19,6 @@ import java.util.Optional;
 
 @Service
 public class TransactServiceImpl implements TransactService {
-
-    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private CustomerRepository customerRepository;
     private AccountRepository accountRepository;
@@ -75,7 +71,11 @@ public class TransactServiceImpl implements TransactService {
                 } else {
                     savedTransact.setFinishDate(new Date());
                     savedTransact.setStatus(Status.REFUSE);
-                    savedTransact.setDescription("Not enough money in the account number: " + debitAccount.getAccountNumber());
+                    savedTransact.setDescription(String.format("Not enough money in the account number '%s'. " +
+                            "Transaction saved with id '%s' and with  status '%s',",
+                            debitAccount.getAccountNumber(), savedTransact.getId(), savedTransact.getStatus()));
+                    transactionRepository.save(savedTransact);
+                    throw  new TransactRefusedException (savedTransact.getDescription());
                 }
             } else {
                 savedTransact.setFinishDate(new Date());

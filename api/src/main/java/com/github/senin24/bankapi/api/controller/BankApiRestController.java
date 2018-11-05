@@ -32,6 +32,8 @@ public class BankApiRestController {
         this.transactService = transactService;
     }
 
+    /*** GETs endpoints: ***/
+
     @GetMapping(path = "/customers")
     ResponseEntity<Collection<Customer>> getCustomers() {
         return ResponseEntity.ok(this.customerService.findAllCustomers());
@@ -62,19 +64,18 @@ public class BankApiRestController {
         return transactService.findById(transact_id).map(ResponseEntity::ok).orElseThrow(() -> new TransactNotFoundException(transact_id));
     }
 
-
+    /*** POSTs endpoints: ***/
 
     @PostMapping(value = "/customers")
-    ResponseEntity<Customer> createCustomer(@org.springframework.web.bind.annotation.RequestBody Customer c) {
+    ResponseEntity<Customer> createCustomer(@RequestBody Customer c) {
         Customer customer = customerService.create(new Customer(c.getName(), c.getInn()));
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(customer.getId()).toUri();
         return ResponseEntity.created(location).build();
     }
 
-
     @PostMapping(value = "/accounts")
-    ResponseEntity<Account> createAccount(@org.springframework.web.bind.annotation.RequestBody RequestBody rb) {
+    ResponseEntity<Account> createAccount(@RequestBody RB rb) {
         Account account = accountService.create(
                 new Account(rb.getAccountNumber(), rb.getBalance(), rb.getCurrency()), rb.getCustomerId());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -83,7 +84,7 @@ public class BankApiRestController {
     }
 
     @PostMapping(value = "/transactions")
-    ResponseEntity<Transact> createAndRunTransact(@org.springframework.web.bind.annotation.RequestBody RequestBody rb) {
+    ResponseEntity<Transact> createAndRunTransact(@RequestBody RB rb) {
         Transact transact = transactService.create(new Transact(
                 rb.getTransactionName(), rb.getAmount(), rb.getCurrency()), rb.getDebitAccountId(), rb.getCreditAccountId());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -91,30 +92,24 @@ public class BankApiRestController {
         return ResponseEntity.created(location).build();
     }
 
+    /*** PUTs endpoints: ***/
 
     @PutMapping(value = "/customers/{customer_id}")
-    ResponseEntity<Customer> updateCustomer(@org.springframework.web.bind.annotation.RequestBody RequestBody rb, @PathVariable Long customer_id) {
+    ResponseEntity<Customer> updateCustomer(@RequestBody RB rb, @PathVariable Long customer_id) {
         URI selfLink = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
         return ResponseEntity.created(selfLink).body(customerService.update(rb.getName(), rb.getDescription(), customer_id));
     }
 
     @PutMapping(value = "/accounts/{account_id}")
-    ResponseEntity<Account> updateAccount(@org.springframework.web.bind.annotation.RequestBody RequestBody rb, @PathVariable Long account_id) {
+    ResponseEntity<Account> updateAccount(@RequestBody RB rb, @PathVariable Long account_id) {
         URI selfLink = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
         return ResponseEntity.created(selfLink).body(accountService.update(rb.getDescription(), account_id));
     }
 
-    @PutMapping(value = "/accounts/{transact_id}")
-    ResponseEntity<Transact> updateTransaction(@org.springframework.web.bind.annotation.RequestBody RequestBody rb, @PathVariable Long transact_id) {
+    @PutMapping(value = "/transactions/{transact_id}")
+    ResponseEntity<Transact> updateTransaction(@RequestBody RB rb, @PathVariable Long transact_id) {
         URI selfLink = URI.create(ServletUriComponentsBuilder.fromCurrentRequest().toUriString());
         return ResponseEntity.created(selfLink).body(transactService.update(rb.getDescription(), transact_id));
     }
-
-
-
-
-
-
-
 
 }

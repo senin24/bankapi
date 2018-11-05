@@ -8,12 +8,14 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.math.BigDecimal;
 
+/**
+ * Class for incoming Request Body.
+ */
 @Data
 @NoArgsConstructor
-public class RequestBody {
-    private Long id, customerId, accountId, debitAccountId, creditAccountId;
+public class RB {
+    private Long customerId, debitAccountId, creditAccountId;
     private String name, description, accountNumber, transactionName;
-    private long inn;
     private BigDecimal balance, amount;
     @Enumerated(EnumType.STRING)
     private Currency currency;

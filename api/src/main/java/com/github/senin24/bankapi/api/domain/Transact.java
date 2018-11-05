@@ -3,6 +3,7 @@ package com.github.senin24.bankapi.api.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -14,12 +15,16 @@ import java.util.Date;
 @AllArgsConstructor
 public class Transact {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String transactionName, description;
     private BigDecimal amount;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date startDate;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date finishDate;
 
     @Enumerated(EnumType.STRING)

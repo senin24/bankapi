@@ -3,8 +3,6 @@ package com.github.senin24.bankapi.api.service;
 import com.github.senin24.bankapi.api.domain.Customer;
 import com.github.senin24.bankapi.api.exception.CustomerNotFoundException;
 import com.github.senin24.bankapi.api.repositories.CustomerRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +12,6 @@ import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
-
-    private final Logger log = LoggerFactory.getLogger(getClass());
 
     CustomerRepository customerRepository;
 

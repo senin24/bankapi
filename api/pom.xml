@@ -15,6 +15,10 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
+    <properties>
+        <start-class>com.github.senin24.bankapi.api.ApiApplication</start-class>
+    </properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -39,11 +43,6 @@
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<!--<dependency>-->
-		<!--<groupId>com.google.guava</groupId>-->
-		<!--<artifactId>guava</artifactId>-->
-		<!--<version>27.0-jre</version>-->
-		<!--</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-autoconfigure</artifactId>
@@ -54,6 +53,26 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!--SWAGGER-->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+
+        <!--A little bit of magic from https://stackoverflow.com/a/47504698/3853459-->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+
     </dependencies>
 
 	<build>
@@ -61,9 +80,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<finalName>api</finalName>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

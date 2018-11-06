@@ -2,10 +2,7 @@ package com.github.senin24.bankapi.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.github.senin24.bankapi.api.domain.Account;
-import com.github.senin24.bankapi.api.domain.Currency;
-import com.github.senin24.bankapi.api.domain.Customer;
-import com.github.senin24.bankapi.api.domain.Transact;
+import com.github.senin24.bankapi.api.domain.*;
 import com.github.senin24.bankapi.api.service.AccountService;
 import com.github.senin24.bankapi.api.service.CustomerService;
 import com.github.senin24.bankapi.api.service.TransactService;
@@ -171,14 +168,57 @@ public class BankApiRestControllerTest {
                 .andExpect(header().string("location", containsString("/v1/customers/" + TEST_ID_01)));
     }
 
-//    @Test
-//    public void postAccount() {
-//    }
-//
-//    @Test
-//    public void postAndRunTransact() {
+    @Test
+    public void postAccountSuccess() throws Exception {
+        Customer customer01 = new Customer("Клиент01", 6201234567891L, "тестовый клиент");
+        customer01.setId(TEST_ID_01);
+        RB rb = new RB();
+        rb.setAccountNumber("00001_BTC_customer_id=1_FromRest");
+        rb.setBalance(new BigDecimal(777));
+        rb.setCurrency(Currency.BTC);
+        rb.setCustomerId(TEST_ID_01);
+        String json = mapper.writeValueAsString(rb);
+        System.out.println(json);
+        given(this.accountService.create(new Account(rb.getAccountNumber(), rb.getBalance(), rb.getCurrency()), rb.getCustomerId()))
+                .willReturn(new Account(TEST_ID_01, rb.getAccountNumber(), "", rb.getBalance(), rb.getCurrency(), customer01));
 
-//    }
+        mockMvc.perform(post("/v1/accounts").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(header().string("location", containsString("/v1/accounts/" + TEST_ID_01)));
+    }
+
+    //TODO fix (https://stackoverflow.com/questions/16170572/unable-to-mock-service-class-in-spring-mvc-controller-tests)
+//    @Test
+    public void postAndRunTransactSuccess() throws Exception {
+        Customer customer01 = new Customer("Клиент01", 6201234567891L, "тестовый клиент");
+        customer01.setId(TEST_ID_01);
+        Account account01 = new Account("00001_RUB_customer01", new BigDecimal(1000), Currency.BTC, customer01);
+        account01.setId(TEST_ID_01);
+        Account account02 = new Account("00002_RUB_customer01", new BigDecimal(1000), Currency.BTC, customer01);
+        account02.setId(TEST_ID_02);
+        RB rb = new RB();
+        rb.setTransactionName("Транзакция BTC FromRest");
+        rb.setAmount(new BigDecimal(100));
+        rb.setCurrency(Currency.BTC);
+        rb.setDebitAccountId(3L);
+        rb.setCreditAccountId(7L);
+        String json = mapper.writeValueAsString(rb);
+        System.out.println(json);
+        Transact mockTransact = new Transact(rb.getTransactionName(), rb.getAmount(), rb.getCurrency(), account01, account02);
+        mockTransact.setId(TEST_ID_01);
+        mockTransact.setStatus(Status.COMPLETE);
+        //TODO mock transactService.create() not work! WHY!?
+        given(this.transactService.create(
+                new Transact(rb.getTransactionName(), rb.getAmount(), rb.getCurrency())
+                , rb.getDebitAccountId(), rb.getCreditAccountId()
+        )).willReturn(mockTransact);
+
+        this.mockMvc.perform(post("/v1/transactions").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(header().string("location", containsString("/v1/transactions/" + TEST_ID_01)));
+    }
 
     @Test
     public void putCustomerSuccess() throws Exception {
@@ -186,9 +226,9 @@ public class BankApiRestControllerTest {
         rb.setName("Client01-update");
         rb.setDescription("Description-update");
         String json = mapper.writeValueAsString(rb);
+        System.out.println(json);
         given(this.customerService.update("", "", 0L))
                 .willReturn(new Customer(TEST_ID_01, rb.getName(), rb.getDescription(), 6201234567891L));
-        System.out.println(json);
 
         this.mockMvc.perform(put("/v1/customers/{customer_id}", TEST_ID_01).contentType(MediaType.APPLICATION_JSON).content(json))
                 .andDo(print())
@@ -196,11 +236,36 @@ public class BankApiRestControllerTest {
                 .andExpect(header().string("location", containsString("/v1/customers/" + TEST_ID_01)));
     }
 
-//    @Test
-//    public void putAccount() {
-//    }
-//
-//    @Test
-//    public void putTransaction() {
-//    }
+    @Test
+    public void putAccountSuccess() throws Exception {
+        RB rb = new RB();
+        rb.setDescription("Description-Account-update");
+        String json = mapper.writeValueAsString(rb);
+        System.out.println(json);
+        given(this.accountService.update(rb.getDescription(), 1L))
+                .willReturn(new Account("00001_RUB_customer01", new BigDecimal(1000), Currency.BTC, null));
+
+        this.mockMvc.perform(put("/v1/accounts/{account_id}", TEST_ID_01).contentType(MediaType.APPLICATION_JSON).content(json))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(header().string("location", containsString("/v1/accounts/" + TEST_ID_01)));
+    }
+
+    @Test
+    public void putTransactionSuccess() throws Exception {
+        Transact transact01 = new Transact("Транзакция Счет01 RUB Счет02", new BigDecimal(100), Currency.RUB, null, null);
+        RB rb = new RB();
+        rb.setDescription("Description-Transaction-update");
+        String json = mapper.writeValueAsString(rb);
+        System.out.println(json);
+        given(this.transactService.update(rb.getDescription(), 1L))
+                .willReturn(
+                        new Transact("Транзакция Счет01 RUB Счет02", new BigDecimal(100), Currency.RUB, null, null)
+                );
+
+        this.mockMvc.perform(put("/v1/transactions/{transact_id}", TEST_ID_01).contentType(MediaType.APPLICATION_JSON).content(json))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(header().string("location", containsString("/v1/transactions/" + TEST_ID_01)));
+    }
 }

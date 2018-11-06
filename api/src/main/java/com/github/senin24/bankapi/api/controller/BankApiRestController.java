@@ -77,7 +77,8 @@ public class BankApiRestController {
     @PostMapping(value = "/accounts")
     ResponseEntity<Account> createAccount(@RequestBody RB rb) {
         Account account = accountService.create(
-                new Account(rb.getAccountNumber(), rb.getBalance(), rb.getCurrency()), rb.getCustomerId());
+                new Account(rb.getAccountNumber(), rb.getBalance(), rb.getCurrency()), rb.getCustomerId()
+        );
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(account.getId()).toUri();
         return ResponseEntity.created(location).build();
@@ -85,8 +86,10 @@ public class BankApiRestController {
 
     @PostMapping(value = "/transactions")
     ResponseEntity<Transact> createAndRunTransact(@RequestBody RB rb) {
-        Transact transact = transactService.create(new Transact(
-                rb.getTransactionName(), rb.getAmount(), rb.getCurrency()), rb.getDebitAccountId(), rb.getCreditAccountId());
+        Transact transact = transactService.create(
+                new Transact(rb.getTransactionName(), rb.getAmount(), rb.getCurrency())
+                , rb.getDebitAccountId(), rb.getCreditAccountId()
+        );
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(transact.getId()).toUri();
         return ResponseEntity.created(location).build();

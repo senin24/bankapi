@@ -37,3 +37,8 @@ spring:
       org.springframework.web: DEBUG
       guru.springframework.controllers: DEBUG
       org.hibernate: DEBUG
+
+
+liquibase:
+  change-log:
+    classpath: liquibase-changeLog.xml

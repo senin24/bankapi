@@ -1,0 +1,71 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="16732265 (generated)" id="1542299734930-1">
+        <createTable tableName="ACCOUNT">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="CONSTRAINT_E"/>
+            </column>
+            <column name="ACCOUNT_NUMBER" type="VARCHAR(255)"/>
+            <column name="BALANCE" type="DECIMAL(19, 2)"/>
+            <column name="CURRENCY" type="VARCHAR(255)"/>
+            <column name="DESCRIPTION" type="VARCHAR(255)"/>
+            <column name="CUSTOMER_ID" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="16732265 (generated)" id="1542299734930-2">
+        <createTable tableName="CUSTOMER">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="CONSTRAINT_5"/>
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR(255)"/>
+            <column name="INN" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="16732265 (generated)" id="1542299734930-3">
+        <createTable tableName="TRANSACT">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="CONSTRAINT_7"/>
+            </column>
+            <column name="AMOUNT" type="DECIMAL(19, 2)"/>
+            <column name="CURRENCY" type="VARCHAR(255)"/>
+            <column name="DESCRIPTION" type="VARCHAR(255)"/>
+            <column name="FINISH_DATE" type="TIMESTAMP"/>
+            <column name="START_DATE" type="TIMESTAMP"/>
+            <column name="STATUS" type="VARCHAR(255)"/>
+            <column name="TRANSACTION_NAME" type="VARCHAR(255)"/>
+            <column name="CREDIT_ACCOUNT_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DEBIT_ACCOUNT_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="16732265 (generated)" id="1542299734930-4">
+        <createIndex indexName="FKAE56SE0VS3CO21YVBM7DN5ER8_INDEX_7" tableName="TRANSACT">
+            <column name="DEBIT_ACCOUNT_ID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="16732265 (generated)" id="1542299734930-5">
+        <createIndex indexName="FKCHMAKGUX2N72CGUL8VNO6IOND_INDEX_7" tableName="TRANSACT">
+            <column name="CREDIT_ACCOUNT_ID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="16732265 (generated)" id="1542299734930-6">
+        <createIndex indexName="FKNNWPO0LFQ4XAI1RS6887SX02K_INDEX_E" tableName="ACCOUNT">
+            <column name="CUSTOMER_ID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="16732265 (generated)" id="1542299734930-7">
+        <addForeignKeyConstraint baseColumnNames="DEBIT_ACCOUNT_ID" baseTableName="TRANSACT" constraintName="FKAE56SE0VS3CO21YVBM7DN5ER8" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="ACCOUNT" validate="true"/>
+    </changeSet>
+    <changeSet author="16732265 (generated)" id="1542299734930-8">
+        <addForeignKeyConstraint baseColumnNames="CREDIT_ACCOUNT_ID" baseTableName="TRANSACT" constraintName="FKCHMAKGUX2N72CGUL8VNO6IOND" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="ACCOUNT" validate="true"/>
+    </changeSet>
+    <changeSet author="16732265 (generated)" id="1542299734930-9">
+        <addForeignKeyConstraint baseColumnNames="CUSTOMER_ID" baseTableName="ACCOUNT" constraintName="FKNNWPO0LFQ4XAI1RS6887SX02K" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="CUSTOMER" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
